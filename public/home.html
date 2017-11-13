@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+   <head>
+     <meta charset="UTF-8">
+	  <title>MyApp</title>
+    <link rel='stylesheet' href='vendor/bower_components/bootstrap/dist/css/bootstrap.css' />
+    <link rel='stylesheet' href='style.css' />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+    integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+    crossorigin=""/>
+    <script src="vendor/bower_components/jquery/dist/jquery.js"></script>
+    <script src="vendor/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
+    integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
+    crossorigin=""></script>
+	</head>
+  <body>
+    <div id="wrap">
+      <button id="addTrack"></button>
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home">Личный Кабинет</a></li>
+        <li><a data-toggle="tab" href="#menu1">Построение трека</a></li>
+        <li><a data-toggle="tab" href="#menu2">Зависимость расстояния от скорости</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+          <h3>Информация пользователя</h3>
+          <p class="name">Имя:</p>
+          <p class="age">Возраст:</p>
+          <p class="sex">Пол:</p>
+          <p class="direction_of_work">Направленность работы:</p>
+          <p class="photos_from_accidents">Фото с мест происшествий:</p>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+          <h3>Карта</h3>
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">Track</label>
+            <select class="form-control tracks" id="exampleFormControlSelect1">
+
+            </select>
+          </div>
+          <div id="map">
+            <div id="weather"></div>
+          </div>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+          <h3>Menu 2</h3>
+          <p>Some content in menu 2.</p>
+        </div>
+      </div>
+    </div>
+    <script src="forHome.js"></script>
+
+
+
+  </body>
+</html>

@@ -1,0 +1,6 @@
+GET / - main Page
++ POST /login - Авторизация
+GET /track - Список треков
+GET /track/id - Один трек из точек
+POST /track - Добавление нового трека
++ GET /user - Получение информации о пользователе

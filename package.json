@@ -1,0 +1,19 @@
+{
+  "name": "diploma2018",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lana",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "mongoose": "^4.13.2",
+    "mongoose-session": "0.0.4",
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5"
+  }
+}
