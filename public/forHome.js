@@ -38,7 +38,7 @@ $('.tracks').on('change', function(){
     trackLine = L.polyline(data.points.map(p => [p.latitude, p.longitude]), {color: 'red'}).addTo(mymap);
     // zoom the map to the polyline
     mymap.fitBounds(trackLine.getBounds());
-
+    $("#weather").empty();
     var currentIconWeather=data.points[0].weather.weather[0].icon;
     var temp=Math.round(data.points[0].weather.main.temp-273);
     $("#weather").append('<img class="weather-widget__img" src="http://openweathermap.org/img/w/'+currentIconWeather+'.png" alt="Weather Moscow , RU" width="50" height="50">' +temp+ ' °C');
