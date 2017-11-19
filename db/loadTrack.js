@@ -36,19 +36,9 @@ async function createNewPoint(track, pointData){
 }
 
 module.exports= function(req, res){
-  if(!res.locals.user) throw "no user";
-  console.log("new track");
-  var track=new Track({
-    user:res.locals.user._id
+  Track.findOne({'track': req.params.track_id},function(err,track){
+    createNewPoint(track,req.body.point);
+    res.send(200);
   });
-  track.save(function (err, point) {
-    if (err) return console.error(err);
-    console.log('track was saved');
-  });
-
-  req.body.points.forEach(function(pointData){
-        createNewPoint(track,pointData);
-  });
-  res.send(200);
 
 };

@@ -11,10 +11,26 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 },store: require('mongoose-session')(mongoose)}));
-
-app.post('/login', require('./public/login').post);
-
 var user = require('./db/models/user').User;
+app.post('/login', require('./public/login').post);
+app.post('/addNewPerson',function(req,res){
+  var us=new user({
+    name:req.body.username,
+    password: req.body.password,
+    age:req.body.age,
+    sex:req.body.sex,
+    direction_of_work:req.body.direction_of_work
+  });
+
+  us.save(function (err, us) {
+    if (err) return res.send(err);
+    console.log('user was saved');
+    res.send(200);
+  });
+
+});
+
+
 app.use(function(req, res, next) {
   user.findOne({'_id':req.session.UserId},function (err, user) {
     res.locals.user = user;
@@ -23,10 +39,26 @@ app.use(function(req, res, next) {
 });
 
 //app.use(require('./db/loadUser'));//добавление нового user
-app.post('/track',require('./db/loadTrack'));//добавление нового track
 
 var point = require('./db/models/gps-track').gps_track;
 var track = require('./db/models/track').track;
+
+app.post('/track',function(req,res){//добавление нового track
+  if(!res.locals.user) throw "no user";
+  console.log("new track");
+  var tr=new track({
+    user:res.locals.user._id
+  });
+  tr.save(function (err, tr) {
+    if (err) return console.error(err);
+    console.log('track was saved');
+  });
+  res.send({url: "/track/" + tr._id});
+});
+
+app.post('/track/:id',require('./db/loadTrack'));//добавление новой точки
+
+
 
 app.get('/track', function(req, res) {
   track.find({user: res.locals.user._id}).limit(100).sort({'_id': -1}).exec(function(err, tracks){

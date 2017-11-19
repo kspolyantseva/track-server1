@@ -48,16 +48,26 @@ $('.tracks').on('change', function(){
 });
 
 $("#addTrack").on('click',function(){
+
   $.post({url: '/track', data: JSON.stringify({
-    points: [
-      {latitude:55.80267072, longitude:37.52918379, speed: 20, date: new Date()},
-      {latitude:55.80279228, longitude:37.52910901, speed: 25, date: new Date()},
-      {latitude:55.80278809, longitude:37.52906343, speed: 30, date: new Date()},
-      {latitude:55.80294595, longitude:37.52850485, speed: 35, date: new Date()},
-    ],
+
+    // points: [
+    //   {latitude:55.80267072, longitude:37.52918379, speed: 20, date: new Date()},
+    //   {latitude:55.80279228, longitude:37.52910901, speed: 25, date: new Date()},
+    //   {latitude:55.80278809, longitude:37.52906343, speed: 30, date: new Date()},
+    //   {latitude:55.80294595, longitude:37.52850485, speed: 35, date: new Date()},
+    // ],
   }), contentType: 'application/json; charset=utf-8'}, function (data) {
-    alert("added");
+    alert("added"+data.url);
+    
+    $.post({url: data.url, data: JSON.stringify({
+      point: {latitude:55.80267072, longitude:37.52918379, speed: 20, date: new Date()},
+    }), contentType: 'application/json; charset=utf-8'}, function (data) {
+      alert("point added");
+    });
   });
+
+
 });
 
 /*

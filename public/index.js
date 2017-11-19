@@ -18,3 +18,16 @@ $('[name="login-form"]').on('submit', function() {
   });
   return false;
 });
+
+$(".reg").on('click',function(){
+  $.post({url:'/addNewPerson', data: JSON.stringify({
+    username:'toy',
+    password: '123',
+    age:44,
+    sex:'female',
+    direction_of_work:'none',
+  }), contentType: 'application/json; charset=utf-8'}, function (data) {
+    alert("user added");
+  });
+  return false;
+});
