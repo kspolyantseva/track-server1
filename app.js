@@ -4,6 +4,7 @@ var mongoose = require('./db');
 var session=require("express-session");
 var app = express();
 
+
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());//form json
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -59,19 +60,40 @@ app.post('/track',function(req,res){//добавление нового track
 app.post('/track/:id',require('./db/loadTrack'));//добавление новой точки
 
 
+//Добавление списка треков этого пользователя
+// app.get('/track', function(req, res) {
+//   track.find({user: res.locals.user._id}).limit(100).sort({'_id': -1}).exec(function(err, tracks){
+//     if (err)  throw err;
+//     res.send({tracks});
+//   });
+// });
 
+// app.get('/track/:track_id', function(req, res) {
+//   point.find({'track': req.params.track_id}).sort({ '_id': 1 }).exec(function(err, points){
+//     if (err)  throw err;
+//     res.send({points});
+//   });
+// });
+
+async function getTrack() {
+    const data = {};
+    const users = await user.find({}).sort({'_id': -1}).exec();
+    for (let us of users) {
+        var tracks=await track.find({'user': us._id}).limit(1).sort({ '_id': -1 }).exec();
+        if(tracks.length){
+            var tr=tracks[0];
+            //console.log(tr._id);
+            var points=await point.find({'track': tr._id}).sort({ '_id': 1 }).exec();
+            //console.log(points);
+            data[us._id] = points;
+        }
+    }
+    return data;
+}
+
+//массив последних треков всех пользователей
 app.get('/track', function(req, res) {
-  track.find({user: res.locals.user._id}).limit(100).sort({'_id': -1}).exec(function(err, tracks){
-    if (err)  throw err;
-    res.send({tracks});
-  });
-});
-
-app.get('/track/:track_id', function(req, res) {
-  point.find({'track': req.params.track_id}).sort({ '_id': 1 }).exec(function(err, points){
-    if (err)  throw err;
-    res.send({points});
-  });
+    getTrack().then(data => res.send(data));
 });
 
 app.get('/user', function(req, res){

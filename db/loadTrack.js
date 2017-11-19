@@ -36,7 +36,8 @@ async function createNewPoint(track, pointData){
 }
 
 module.exports= function(req, res){
-  Track.findOne({'track': req.params.track_id},function(err,track){
+  Track.findOne({'_id': req.params.id},function(err,track){
+    //console.log(track);
     createNewPoint(track,req.body.point);
     res.send(200);
   });
