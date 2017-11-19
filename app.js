@@ -79,13 +79,14 @@ async function getTrack() {
     const data = {};
     const users = await user.find({}).sort({'_id': -1}).exec();
     for (let us of users) {
+      //console.log(us);
         var tracks=await track.find({'user': us._id}).limit(1).sort({ '_id': -1 }).exec();
         if(tracks.length){
             var tr=tracks[0];
             //console.log(tr._id);
             var points=await point.find({'track': tr._id}).sort({ '_id': 1 }).exec();
             //console.log(points);
-            data[us._id] = points;
+            data[us.name] = points;
         }
     }
     return data;

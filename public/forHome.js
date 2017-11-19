@@ -20,17 +20,19 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 //обновление треков на карте
 setInterval(function(){
 var trackLines=[];
+var markers=[];
   $.get("/track",function(data){
-    console.log(data);
+    //console.log(data);
 
     if (trackLines.length) {
       for (let line;line<trackLines.length;line++){
         mymap.removeLayer(trackLines[line]);
+        mymap.removeLayer(markers[line]);
       }
     }
 
-      Object.keys(data).map(key => data[key]).forEach(function(data_points) {
-      //console.log(data_points);
+      Object.keys(data).map(key => data[key]).forEach(function(data_points,key) {
+      //console.log(data_points.map(p => [p.latitude, p.longitude])[data_points.length-1]);
 
       trackLines.push(L.multiOptionsPolyline(data_points.map(p => [p.latitude, p.longitude]), {
           multiOptions: {
@@ -58,6 +60,15 @@ var trackLines=[];
           lineCap: 'butt',
           opacity: 0.75,
           smoothFactor: 1}).addTo(mymap));
+
+  //маркеры с popup
+    markers.push(L.marker(data_points.map(p => [p.latitude, p.longitude])[data_points.length-1],{title:Object.keys(data)[key]}).addTo(mymap).bindPopup('<p>'+Object.keys(data)[key]+'</p>').openPopup());
+
+//просто popup
+    // markers.push(L.popup({closeOnClick:false})
+    // .setLatLng(data_points.map(p => [p.latitude, p.longitude])[data_points.length-1])
+    // .setContent('<p>'+Object.keys(data)[key]+'</p>')
+    // .addTo(mymap));
 
       // zoom the map to the polyline
       mymap.fitBounds(trackLines[0].getBounds());
