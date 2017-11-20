@@ -33,7 +33,7 @@ schema.statics.authorize = function(username, password,callback){
   var user=this;
   user.findOne({'name':username},function (err, user) {
     if (err) return handleError(err);
-    if (user) return callback("user not found");
+    if (!user) return callback("user not found");
     if (user.checkPassword(password)) {
       callback(null, user);
     }
