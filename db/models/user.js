@@ -32,12 +32,16 @@ schema.methods.checkPassword = function(password) {
 schema.statics.authorize = function(username, password,callback){
   var user=this;
   user.findOne({'name':username},function (err, user) {
+    console.log(user,err,"in function");
     if (err) return handleError(err);
+    console.log("next1");
     if (!user) return callback("user not found");
+    console.log("next2");
     if (user.checkPassword(password)) {
+      console.log("next3");
       callback(null, user);
-    }
-
+    }else{
+    callback("password is not correct");}
     //res.send(user);
   });
 };
