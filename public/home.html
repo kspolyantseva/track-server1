@@ -5,6 +5,7 @@
 	  <title>MyApp</title>
     <link rel='stylesheet' href='vendor/bower_components/bootstrap/dist/css/bootstrap.css' />
     <link rel='stylesheet' href='style.css' />
+    <link rel='stylesheet' href='vendor/bower_components/bootstrap-table/dist/bootstrap-table.css' />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
     integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
     crossorigin=""/>
@@ -14,10 +15,12 @@
     integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
     crossorigin=""></script>
     <script src="vendor/bower_components/Leaflet.MultiOptionsPolyline/Leaflet.MultiOptionsPolyline.js"></script>
+    <script src="vendor/bower_components/bootstrap-table/dist/bootstrap-table.js"></script>
+    <script src="vendor/bower_components/bootstrap-table/dist/extensions/filter/bootstrap-table-filter.js"></script>
 	</head>
   <body>
     <div id="wrap">
-      <button id="addTrack"></button>
+      <!-- <button id="addTrack"></button> -->
       <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#home">Личный Кабинет</a></li>
         <li><a data-toggle="tab" href="#menu1">Построение трека</a></li>
@@ -41,6 +44,24 @@
 
             </select>
           </div> -->
+
+          <ul class="nav nav-tabs">
+            <li><a data-toggle="tab" href="#last-tracks">Последние треки</a></li>
+            <li><a data-toggle="tab" href="#archive-user-tracks">Архив треков пользователя</a></li>
+          </ul>
+
+          <div class="tab-content">
+            <div id="last-tracks" class="tab-pane fade">
+              <div id="tracks-table"></div>
+              <button class="draw1">Отобразить на карте</button>
+            </div>
+            <div id="archive-user-tracks" class="tab-pane fade">
+              <div id="archtracks-table"></div>
+              <button class="draw2">Отобразить на карте</button>
+            </div>
+          </div>
+
+
           <div id="map">
             <div id="weather"></div>
           </div>

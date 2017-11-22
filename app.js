@@ -64,15 +64,15 @@ app.post('/track',function(req,res){//добавление нового track
 app.post('/track/:id',require('./db/loadTrack'));//добавление новой точки
 
 
-//Добавление списка треков этого пользователя
-// app.get('/track', function(req, res) {
+// //Добавление списка треков этого пользователя
+// app.get('/trackUser', function(req, res) {
 //   track.find({user: res.locals.user._id}).limit(100).sort({'_id': -1}).exec(function(err, tracks){
 //     if (err)  throw err;
 //     res.send({tracks});
 //   });
 // });
-
-// app.get('/track/:track_id', function(req, res) {
+//
+// app.get('/trackUser/:track_id', function(req, res) {
 //   point.find({'track': req.params.track_id}).sort({ '_id': 1 }).exec(function(err, points){
 //     if (err)  throw err;
 //     res.send({points});
@@ -101,6 +101,22 @@ app.get('/track', function(req, res) {
     getTrack().then(data => res.send(data));
 });
 
+async function getTracksUser(res) {
+    const data = [];
+        var tracks=await track.find({user: res.locals.user._id}).limit(100).sort({ '_id': -1 }).exec();
+        for (let tr of tracks) {
+            var points=await point.find({'track': tr._id}).sort({ '_id': 1 }).exec();
+            data.push(points);
+        }
+
+    return data;
+}
+
+//треки текущего пользователя
+app.get('/trackUser', function(req, res) {
+    getTracksUser(res).then(data => res.send(data));
+});
+
 app.get('/user', function(req, res){
   res.send(res.locals.user);
 });
@@ -109,6 +125,6 @@ app.get('/user', function(req, res){
 
 
 
-app.listen(3000, function(){
-  console.log('Example app listening on port 3000!');
+app.listen(8080, function(){
+  console.log('Example app listening on port 8080!');
 });
