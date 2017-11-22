@@ -24,9 +24,13 @@ app.post('/addNewPerson',function(req,res){
   });
 
   us.save(function (err, us) {
-    if (err) return res.send(err);
-    console.log('user was saved');
-    res.send(200);
+    if (err) {
+      res.send("Такое имя пользователя уже существует!");
+      return;
+    }
+    else
+    {console.log('user was saved');
+    res.send(200);}
   });
 
 });

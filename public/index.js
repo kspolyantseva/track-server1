@@ -26,8 +26,8 @@ $(".reg").on('click',function(){
     age:44,
     sex:'female',
     direction_of_work:'none',
-  }), contentType: 'application/json; charset=utf-8'}, function (data) {
-    alert("user added");
+  }), contentType: 'application/json; charset=utf-8'}, function (data,err) {
+    if(!err) alert("user added");
   });
   return false;
 });
