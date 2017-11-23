@@ -17,7 +17,7 @@ function getWeather(args) {
   return request({url:'http://api.openweathermap.org/data/2.5/weather?lat='+args.latitude+'&lon='+args.longitude+'&APPID=ca0c8249795faca7cd13a6f64e2bccd2',json:true});
 }
 
-async function createNewPoint(track, pointData){
+async function createNewPoint(track, pointData,res){
   const weather = await getWeather(pointData);
 
   const {latitude, longitude, date, speed} = pointData;
@@ -29,8 +29,9 @@ async function createNewPoint(track, pointData){
   });
 
   point.save(function (err, point) {
-    if (err) return console.error(err);
+    if (err) return res.status(400).send("can't add new point "+err);
     console.log('point was saved');
+    res.send(200);
   });
 
 }
@@ -38,8 +39,8 @@ async function createNewPoint(track, pointData){
 module.exports= function(req, res){
   Track.findOne({'_id': req.params.id},function(err,track){
     //console.log(track);
-    createNewPoint(track,req.body.point);
-    res.send(200);
+    createNewPoint(track,req.body.point,res);
+
   });
 
 };
