@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 },store: require('mongoose-session')(mongoose)}));
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 3600000 },resave:true,saveUninitialized:false,store: require('mongoose-session')(mongoose)}));
 var user = require('./db/models/user').User;
 app.post('/login', require('./public/login').post);
 app.post('/addNewPerson',function(req,res){
@@ -103,21 +103,28 @@ app.get('/track', function(req, res) {
 
 async function getTracksUser(res) {
     const data = [];
+    if(!res.locals.user){
+      return res.status(403).send("user not auth ");
+    }
         var tracks=await track.find({user: res.locals.user._id}).limit(100).sort({ '_id': -1 }).exec();
         for (let tr of tracks) {
             var points=await point.find({'track': tr._id}).sort({ '_id': 1 }).exec();
             data.push(points);
         }
 
-    return data;
+    //return data;
+    res.send(data);
 }
 
 //треки текущего пользователя
 app.get('/trackUser', function(req, res) {
-    getTracksUser(res).then(data => res.send(data));
+    getTracksUser(res);//.then(data => res.send(data));
 });
 
 app.get('/user', function(req, res){
+  if(!res.locals.user){
+    return res.status(403).send("user not auth ");
+  }
   res.send(res.locals.user);
 });
 
