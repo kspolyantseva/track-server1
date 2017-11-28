@@ -118,16 +118,7 @@ interval=setInterval(function(){
 
   $.get("/track",function(data){
 
-//отображение выделенных последних треков
-       $(".draw1").on('click',function(){
-         console.log("push draw1");
-         var checkData={};
-         var selected=$("#tracks-table").bootstrapTable('getSelections');
-         for(let i=0;i<selected.length;i++){
-           checkData[selected[i].username]=data[selected[i].username];
-         }
-        drawTracks(checkData);
-       })
+
 
        //отрисовка треков при открытии карты
       drawTracks(data);
@@ -195,6 +186,20 @@ interval=setInterval(function(){
   var dataTable=[];
       $.get("/track",function(data){
         console.log(data);
+
+        //отображение выделенных последних треков
+               $(".draw1").on('click',function(){
+                 console.log("push draw1");
+                 var checkData={};
+                 var selected=$("#tracks-table").bootstrapTable('getSelections');
+                 for(let i=0;i<selected.length;i++){
+                   checkData[selected[i].username]=data[selected[i].username];
+                 }
+                drawTracks(checkData);
+               })
+
+
+
     //данные для таблицы последних треков
         dataTable.length=0;
           for(let i=0;i<Object.keys(data).length;i++){
