@@ -148,10 +148,16 @@ interval=setInterval(function(){
     //Добавление списка треков этого пользователя
       var archiveUserTracks=[];
       $.get("/trackUser", function(tracks) {
+        console.log(tracks);
           archiveUserTracks.length=0;
-          tracks.forEach(function(track) {
-           archiveUserTracks.push({trackid:track[0].track,date:track[0].date,weather:track[0].weather.weather[0].description});
-          });
+
+            tracks.forEach(function(track) {
+              if(track.length){
+                archiveUserTracks.push({trackid:track[0].track,date:track[0].date,weather:track[0].weather.weather[0].description});
+              }
+            });
+
+
           $("#archtracks-table").bootstrapTable({
             classes:"table table-hover",
             striped:false,
@@ -188,12 +194,16 @@ interval=setInterval(function(){
     //отображение таблицы последних треков
   var dataTable=[];
       $.get("/track",function(data){
+        console.log(data);
     //данные для таблицы последних треков
         dataTable.length=0;
           for(let i=0;i<Object.keys(data).length;i++){
+
             let key=Object.keys(data)[i];
+
             if(data[key].length){
-              dataTable.push({userid:data[key][i]._id,username:key,date:data[key][i].date});
+                dataTable.push({userid:data[key][0]._id,username:key,date:data[key][0].date});
+
 
             }
           }
