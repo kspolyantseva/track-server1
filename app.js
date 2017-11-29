@@ -101,16 +101,25 @@ app.get('/track', function(req, res) {
     getTrack().then(data => res.send(data));
 });
 
-async function getTracksUser(res) {
+async function getTracksUser(req,res) {
     const data = [];
+
     if(!res.locals.user){
       return res.status(403).send("user not auth ");
     }
-        var tracks=await track.find({user: res.locals.user._id}).limit(100).sort({ '_id': -1 }).exec();
-        for (let tr of tracks) {
-            var points=await point.find({'track': tr._id}).sort({ '_id': 1 }).exec();
-            data.push(points);
-        }
+    var users;
+    var tracks;
+    if(res.locals.user.name!="admin"){
+      tracks=await track.find({user: res.locals.user._id}).limit(100).sort({ '_id': -1 }).exec();
+    }else{
+      users = await user.find({name: req.query.username}).sort({'_id': -1}).exec();//сначала находим по имени id юзера, потом его треки
+      tracks=await track.find({user: users[0]._id}).limit(100).sort({ '_id': -1 }).exec();//если смотрит админ, то выбирает по имени
+    }
+
+    for (let tr of tracks) {
+        var points=await point.find({'track': tr._id}).sort({ '_id': 1 }).exec();
+        data.push(points);
+    }
 
     //return data;
     res.send(data);
@@ -118,19 +127,38 @@ async function getTracksUser(res) {
 
 //треки текущего пользователя
 app.get('/trackUser', function(req, res) {
-    getTracksUser(res);//.then(data => res.send(data));
+    getTracksUser(req,res);
 });
+
+// app.get('/trackUser', function(req, res) {
+//   if(res.locals.user.name!="admin"){
+//     getTracksUser(req,res);//.then(data => res.send(data));
+//   }else{
+//     res.status(403).send("Этот запрос только для обычных пользователей");
+//   }
+// });
 
 app.get('/user', function(req, res){
   if(!res.locals.user){
     return res.status(403).send("user not auth ");
   }
+
   res.send(res.locals.user);
 });
 
-
-
-
+//получение имен всех пользователей
+app.get('/users', function(req, res){
+  var names=[];
+  user.find({}).sort({'_id': -1}).exec(function(err, users){
+      if (err)  throw err;
+      for(var i=0;i<users.length;i++){
+        if(users[i].name!="admin"){
+          names.push(users[i].name);
+        }
+      }
+      res.send(names);
+  });
+});
 
 app.listen(3000, function(){
   console.log('Example app listening on port 3000!');

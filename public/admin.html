@@ -21,20 +21,20 @@
   <body>
     <div id="wrap">
       <!-- <button id="addTrack"></button> -->
-      <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#home">Личный Кабинет</a></li>
-        <li><a data-toggle="tab" href="#menu1">Построение трека</a></li>
+      <ul class="nav nav-tabs" id="myTabs">
+        <li class="active"><a data-toggle="tab" href="#home">Панель Администратора</a></li>
+        <li ><a data-toggle="tab" href="#menu1">Построение трека</a></li>
         <li><a data-toggle="tab" href="#menu2">Зависимость расстояния от скорости</a></li>
       </ul>
 
       <div class="tab-content">
         <div id="home" class="tab-pane fade in active">
-          <h3>Информация пользователя</h3>
-          <p class="name">Имя:</p>
+          <h2>Добро пожаловать в панель Администратора!</h2>
+          <!-- <p class="name">Имя:</p>
           <p class="age">Возраст:</p>
           <p class="sex">Пол:</p>
           <p class="direction_of_work">Направленность работы:</p>
-          <p class="photos_from_accidents">Фото с мест происшествий:</p>
+          <p class="photos_from_accidents">Фото с мест происшествий:</p> -->
         </div>
         <div id="menu1" class="tab-pane fade">
           <h3>Карта</h3>
@@ -47,26 +47,44 @@
 
           <ul class="nav nav-tabs">
             <li><a data-toggle="tab" href="#last-tracks">Последние треки</a></li>
-            <li><a data-toggle="tab" href="#archive-user-tracks">Архив треков пользователя</a></li>
+            <!-- <li><a data-toggle="tab" href="#archive-user-tracks">Архив треков пользователя</a></li> -->
+            <li><a data-toggle="tab" href="#archive-users-tracks">Архив треков пользователей</a></li>
           </ul>
 
           <div class="tab-content">
             <div id="last-tracks" class="tab-pane fade">
               <div id="tracks-table"></div>
-              <button class="draw1">Отобразить на карте</button>
+              <button class="draw1">Отобразить на карте</button><br>
             </div>
-            <div id="archive-user-tracks" class="tab-pane fade">
-              <div id="archtracks-table"></div>
-              <button class="draw2">Отобразить на карте</button>
-            </div>
-          </div>
 
+            <div id="archive-users-tracks" class="tab-pane fade">
+
+          		 <div class="dropdown">
+          		 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+          		  name-user="">
+          		    Выбор Пользователя
+          		    <span class="caret"></span>
+          		  </button>
+          		  <ul class="dropdown-menu drop1 scrollable-menu" aria-labelledby="dropdownMenu1">
+
+          		  </ul>
+          		</div>
+
+              <div id="archuserstracks-table"></div>
+              <button class="draw3">Отобразить на карте</button><br>
+            </div>
+
+          </div>
           <button id="start">Включить режим реального времени</button>
           <button id="stop">Остановить</button>
           <div id="map">
             <div id="weather"></div>
           </div>
+
+
         </div>
+
+
         <div id="menu2" class="tab-pane fade">
           <h3>Menu 2</h3>
           <p>Some content in menu 2.</p>
@@ -74,7 +92,7 @@
       </div>
     </div>
     <script src="forHome.js"></script>
-
+    <script src="admin.js"></script>
 
 
   </body>

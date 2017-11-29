@@ -14,3 +14,17 @@
   z-index: 999;
   margin: 10px 80px;
 }
+
+.open > .dropdown-menu {
+    z-index: 10000;
+}
+
+.draw1,.draw2,.draw3,#dropdownMenu1,#start,#stop{
+  margin:20px;
+}
+
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}

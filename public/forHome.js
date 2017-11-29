@@ -6,8 +6,7 @@ $.get( "/user", function( data ) {
       $('#home p.'+Object.keys(data)[i]).append("<p>"+data[Object.keys(data)[i]]+"</p>");
     }
   }
-
-
+if(data.name!="admin"){
   $.get("/trackUser", function(tracks) {
 
 
@@ -17,8 +16,10 @@ $.get( "/user", function( data ) {
         var selected=$("#archtracks-table").bootstrapTable('getSelections');
         for(let i=0;i<selected.length;i++){
           tracks.forEach(function(points) {
-            if(selected[i].trackid[0]==points[0].track[0]){
-              checkData[data.name+i]=points;//пока что с таким именем!
+            if(points.length){
+              if(selected[i].trackid[0]==points[0].track[0]){
+                checkData[data.name+i]=points;//пока что с таким именем!
+              }
             }
           });
         }
@@ -28,6 +29,8 @@ $.get( "/user", function( data ) {
       })
 
     });
+}
+
 
 });
 
@@ -102,7 +105,6 @@ function drawTracks(data){
 
 var interval;
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-
   var target = $(e.target).attr("href"); // activated tab
 //  if (target === '#menu1' && !mymap) {
   if (target === '#menu1') {
@@ -113,19 +115,19 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     }).addTo(mymap);
 
 
-//обновление треков на карте
-interval=setInterval(function(){
+    //обновление треков на карте
+    $("#start").on('click',function(){
+      interval=setInterval(function(){
+        $.get("/track",function(data){
+             //отрисовка треков при открытии карты
+            drawTracks(data);
+        });
+      },5000);
+    });
 
-  $.get("/track",function(data){
-
-
-
-       //отрисовка треков при открытии карты
-      drawTracks(data);
-
-
-  });
-},5000);
+    $("#stop").on('click',function(){
+      clearInterval(interval);//остановка реал-тайм режима отрисовки
+    });
 
 
   }
@@ -135,7 +137,7 @@ interval=setInterval(function(){
 
 
   if (target === '#archive-user-tracks'){
-    clearInterval(interval);
+
     //Добавление списка треков этого пользователя
       var archiveUserTracks=[];
       $.get("/trackUser", function(tracks) {
@@ -181,7 +183,7 @@ interval=setInterval(function(){
 
   }
   if (target === '#last-tracks'){
-    clearInterval(interval);
+
     //отображение таблицы последних треков
   var dataTable=[];
       $.get("/track",function(data){

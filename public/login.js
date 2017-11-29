@@ -11,7 +11,7 @@ exports.post = function(req, res, next) {
         if(!err){req.session.userName=user.name;
           req.session.UserId=user._id;
         }
-        res.send({"login":!err});
+        res.send({"login":!err,"name":user.name});
       });
     });
 
