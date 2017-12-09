@@ -51,52 +51,79 @@ function drawTracks(data){
   trackLines.length=0;
   markers.length=0;
 
-    Object.keys(data).map(key => data[key]).forEach(function(data_points,key) {
-    if(data_points.length){
-      trackLines.push(L.multiOptionsPolyline(data_points.map(p => [p.latitude, p.longitude]), {
-          multiOptions: {
-              optionIdxFn: function (latLng, prevLatLng, index) {
-                //return index;
-                var i, speed,
-                    speedThresholds = [30, 35, 40, 45, 50, 55, 60, 65];
+//привязка точек к дорогам
+  var apiKey = 'AIzaSyB2kfbulpE0wJURINPHN7nMRuIMfLaGZow';
+  Object.keys(data).map(key => data[key]).forEach(function(data_points,key) {
+  var pathValues;
+  if(data_points.length){
+    var name=Object.keys(data)[key];
+    pathValues=data_points.map(p => p.latitude+', '+p.longitude);
+    $.get('https://roads.googleapis.com/v1/snapToRoads', {
+        interpolate: true,
+        key: apiKey,
+        path: pathValues.join('|')
+      }, function(datanew) {
+        // console.log(datanew.snappedPoints.map(p => [p.location.latitude, p.location.longitude]));
+        // console.log(data_points.map(p => [p.latitude, p.longitude]));
+        var pointsToRoad=datanew.snappedPoints.map(p => [p.location.latitude, p.location.longitude]);
 
-                speed=data_points[index].speed;
+        var prevspeed=0;;
+        trackLines.push(L.multiOptionsPolyline(pointsToRoad, {
+            multiOptions: {
+                optionIdxFn: function (latLng, prevLatLng, index) {
+                  //return index;
+                  var i, speed,
+                      speedThresholds = [30, 35, 40, 45, 50, 55, 60, 65];
 
-                for (i = 0; i < speedThresholds.length; ++i) {
-                    if (speed <= speedThresholds[i]) {
-                        return i;
-                    }
-                }
-                return speedThresholds.length;
+                  if(index>=data_points.length){
+                    if(prevspeed==0)
+                    {prevspeed=data_points[index-1].speed; }
+                    speed=prevspeed;
+                  }else
+                  {
+                    speed=data_points[index].speed;
+                  }
+
+                  for (i = 0; i < speedThresholds.length; ++i) {
+                      if (speed <= speedThresholds[i]) {
+                          return i;
+                      }
+                  }
+                  return speedThresholds.length;
+              },
+              options: [
+                  {color: '#0000FF'}, {color: '#0040FF'}, {color: '#0080FF'},
+                  {color: '#00FFB0'}, {color: '#00E000'}, {color: '#80FF00'},
+                  {color: '#FFFF00'}, {color: '#FFC000'}, {color: '#FF0000'}
+              ]
             },
-            options: [
-                {color: '#0000FF'}, {color: '#0040FF'}, {color: '#0080FF'},
-                {color: '#00FFB0'}, {color: '#00E000'}, {color: '#80FF00'},
-                {color: '#FFFF00'}, {color: '#FFC000'}, {color: '#FF0000'}
-            ]
-          },
-          weight: 5,
-          lineCap: 'butt',
-          opacity: 0.75,
-          smoothFactor: 1}).addTo(mymap));
+            weight: 5,
+            lineCap: 'butt',
+            opacity: 0.75,
+            smoothFactor: 1}).addTo(mymap));
 
-  //маркеры с popup
-    markers.push(L.marker(data_points.map(p => [p.latitude, p.longitude])[data_points.length-1],{title:Object.keys(data)[key]}).addTo(mymap).bindPopup('<p>'+Object.keys(data)[key]+'</p>',{autoPan:false}).openPopup());
+    //маркеры с popup
+      markers.push(L.marker(pointsToRoad[pointsToRoad.length-1],{title:Object.keys(data)[key]}).addTo(mymap).bindPopup('<p>'+Object.keys(data)[key]+'</p>',{autoPan:false}).openPopup());
 
-//просто popup
-    // markers.push(L.popup({closeOnClick:false})
-    // .setLatLng(data_points.map(p => [p.latitude, p.longitude])[data_points.length-1])
-    // .setContent('<p>'+Object.keys(data)[key]+'</p>')
-    // .addTo(mymap));
+  //просто popup
+      // markers.push(L.popup({closeOnClick:false})
+      // .setLatLng(data_points.map(p => [p.latitude, p.longitude])[data_points.length-1])
+      // .setContent('<p>'+Object.keys(data)[key]+'</p>')
+      // .addTo(mymap));
 
-      // zoom the map to the polyline
-      //mymap.fitBounds(trackLines[0].getBounds());
-      //mymap.setView([ 55.803045, 37.523525], 10);
-      $("#weather").empty();
-      var currentIconWeather=data_points[0].weather.weather[0].icon;
-      var temp=Math.round(data_points[0].weather.main.temp-273);
-      var description=data_points[0].weather.weather[0].description;
-      $("#weather").append('<img class="weather-widget__img" src="http://openweathermap.org/img/w/'+currentIconWeather+'.png" alt="Weather Moscow , RU" width="50" height="50">' +temp+ ' °C '+description);
+        // zoom the map to the polyline
+        //mymap.fitBounds(trackLines[0].getBounds());
+        //mymap.setView([ 55.803045, 37.523525], 10);
+
+        //console.log(trackLines[0]);
+        //trackLines[0].svg({"stroke":"#03f","stroke-opacity":"0.3","stroke-width":"10","stroke-linecap":"round","stroke-linejoin":"round"});
+
+        $("#weather").empty();
+        var currentIconWeather=data_points[0].weather.weather[0].icon;
+        var temp=Math.round(data_points[0].weather.main.temp-273);
+        var description=data_points[0].weather.weather[0].description;
+        $("#weather").append('<img class="weather-widget__img" src="http://openweathermap.org/img/w/'+currentIconWeather+'.png" alt="Weather Moscow , RU" width="50" height="50">' +temp+ ' °C '+description);
+      });
     }
   });
 }
@@ -146,7 +173,15 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
             tracks.forEach(function(track) {
               if(track.length){
-                archiveUserTracks.push({trackid:track[0].track,date:track[0].date,weather:track[0].weather.weather[0].description});
+
+                var objFromDate=getTimeMetrics(track);
+                archiveUserTracks.push({
+                  trackid:track[0].track,
+                  date:track[0].date,
+                  weekday:objFromDate.weekday,
+                  weather:track[0].weather.weather[0].description,
+                  duration:objFromDate.durationData
+                });
               }
             });
 
@@ -173,8 +208,18 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             },{
               sortable:true,
               searchable:true,
+              field: 'weekday',
+              title: 'День недели'
+            },{
+              sortable:true,
+              searchable:true,
               field: 'weather',
               title: 'Погода'
+            },{
+              sortable:true,
+              searchable:true,
+              field: 'duration',
+              title: 'Время в пути'
             }],
             data: archiveUserTracks
           });
@@ -209,9 +254,14 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             let key=Object.keys(data)[i];
 
             if(data[key].length){
-                dataTable.push({userid:data[key][0]._id,username:key,date:data[key][0].date});
-
-
+              var objFromData=getTimeMetrics(data[key]);
+              dataTable.push({
+                userid:data[key][0]._id,
+                username:key,
+                date:data[key][0].date,
+                duration:objFromData.durationData,
+                weekday:objFromData.weekday
+              });
             }
           }
 
@@ -239,6 +289,16 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
               searchable:true,
                 field: 'date',
                 title: 'Дата и время'
+            },{
+              sortable:true,
+              searchable:true,
+              field: 'weekday',
+              title: 'День недели'
+            },{
+              sortable:true,
+              searchable:true,
+              field: 'duration',
+              title: 'Время в пути'
             }],
             data: dataTable
           });
@@ -253,7 +313,25 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 });
 
 
-
+function getTimeMetrics(track){
+  var timestart=Date.parse(track[0].date);
+  var timeend=Date.parse(track[track.length-1].date);
+  var msDuration=(timeend-timestart);
+  var durationData=new Date(msDuration);
+  var options = {
+    // era: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long',
+    timezone: 'UTC',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric'
+  };
+  var weekday=new Date(timestart).toLocaleString("ru", options).split(',')[0];
+  return {durationData:durationData.toUTCString().split(' ')[4],weekday:weekday};
+}
 
 
 // var trackLine;

@@ -25,7 +25,7 @@ function changeButtonText(currentThis,id){
 var chosenUser=-1;
 //Обработка выпадающего списка "Выбор Пользователя"
 $(".drop1").on('click', 'li a', function(){
-  
+
    	changeButtonText(this,"#dropdownMenu1");
    	chosenUser=$(this).attr("name-user");
    	$("#dropdownMenu1").attr("name-user",chosenUser);
@@ -37,7 +37,14 @@ $(".drop1").on('click', 'li a', function(){
 
           tracks.forEach(function(track) {
             if(track.length){
-              archiveUserTracks.push({trackid:track[0].track,date:track[0].date,weather:track[0].weather.weather[0].description});
+              var objFromDate=getTimeMetrics(track);
+              archiveUserTracks.push({
+                trackid:track[0].track,
+                date:track[0].date,
+                weather:track[0].weather.weather[0].description,
+                weekday:objFromDate.weekday,
+                duration:objFromDate.durationData
+              });
             }
           });
 
@@ -66,6 +73,16 @@ $(".drop1").on('click', 'li a', function(){
             searchable:true,
             field: 'weather',
             title: 'Погода'
+          },{
+            sortable:true,
+            searchable:true,
+            field: 'weekday',
+            title: 'День недели'
+          },{
+            sortable:true,
+            searchable:true,
+            field: 'duration',
+            title: 'Время в пути'
           }],
           data: archiveUserTracks
         });
