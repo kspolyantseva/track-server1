@@ -19,7 +19,7 @@
     z-index: 10000;
 }
 
-.draw1,.draw2,.draw3,#dropdownMenu1,#start,#stop{
+.draw1,.draw2,.draw3,#dropdownMenu1,#start,#stop,#clearMap{
   margin:20px;
 }
 

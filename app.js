@@ -160,6 +160,33 @@ app.get('/users', function(req, res){
   });
 });
 
+var pointOfAllegedViolations = require('./db/models/pointsOfAllegedViolations').pointOfAllegedViolations;
+
+app.post('/addNewPointOfAllegedViolations',function(req,res){
+  if(!res.locals.user) throw "no user";
+  var point=new pointOfAllegedViolations({
+    latitude:req.body.latitude,
+    longitude:req.body.latitude,
+    changeX:req.body.changeX,
+    changeY:req.body.changeY,
+    changeZ:req.body.changeZ,
+    userName:res.locals.user.name,
+    date:req.body.date,
+  });
+
+  point.save(function (err, point) {
+    if (err) {
+      res.send("Такое имя пользователя уже существует!");
+      return;
+    }
+    else
+    {console.log('point was saved');
+    res.send(200);}
+  });
+
+});
+
+
 app.listen(3000, function(){
   console.log('Example app listening on port 3000!');
 });

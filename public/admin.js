@@ -43,7 +43,8 @@ $(".drop1").on('click', 'li a', function(){
                 date:track[0].date,
                 weather:track[0].weather.weather[0].description,
                 weekday:objFromDate.weekday,
-                duration:objFromDate.durationData
+                duration:objFromDate.durationData,
+                amountPoints:track.length
               });
             }
           });
@@ -83,6 +84,11 @@ $(".drop1").on('click', 'li a', function(){
             searchable:true,
             field: 'duration',
             title: 'Время в пути'
+          },{
+            sortable:true,
+            searchable:true,
+            field: 'amountPoints',
+            title: 'Количество точек'
           }],
           data: archiveUserTracks
         });
