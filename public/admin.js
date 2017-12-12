@@ -106,9 +106,9 @@ $(".drop1").on('click', 'li a', function(){
               }
             });
           }
-        //  console.log(checkData);
+          // console.log(checkData);
          drawTracks(checkData);
-
+         drawChart(checkData);
         })
 
 

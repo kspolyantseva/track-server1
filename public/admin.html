@@ -17,6 +17,7 @@
     <script src="vendor/bower_components/Leaflet.MultiOptionsPolyline/Leaflet.MultiOptionsPolyline.js"></script>
     <script src="vendor/bower_components/bootstrap-table/dist/bootstrap-table.js"></script>
     <script src="vendor/bower_components/bootstrap-table/dist/extensions/filter/bootstrap-table-filter.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
 	</head>
   <body>
     <div id="wrap">
@@ -24,7 +25,7 @@
       <ul class="nav nav-tabs" id="myTabs">
         <li class="active"><a data-toggle="tab" href="#home">Панель Администратора</a></li>
         <li ><a data-toggle="tab" href="#menu1">Построение трека</a></li>
-        <li><a data-toggle="tab" href="#menu2">Зависимость расстояния от скорости</a></li>
+        <li><a data-toggle="tab" href="#menu2">Графики</a></li>
       </ul>
 
       <div class="tab-content">
@@ -71,7 +72,8 @@
           		</div>
 
               <div id="archuserstracks-table"></div>
-              <button class="draw3">Отобразить на карте</button><br>
+              <button class="draw3">Отобразить на карте</button>
+              <!-- <button class="drawChart1">Нарисовать графики выбранных треков</button> -->
             </div>
 
           </div>
@@ -87,11 +89,17 @@
 
 
         <div id="menu2" class="tab-pane fade">
-          <h3>Menu 2</h3>
-          <p>Some content in menu 2.</p>
+
+          <div class="mysvg">
+            <svg width="960" height="500"></svg>
+          </div>
+          <div class="mysvg1">
+            <svg width="960" height="500"></svg>
+          </div>
         </div>
       </div>
     </div>
+    <script src="drawCharts.js"></script>
     <script src="forHome.js"></script>
     <script src="admin.js"></script>
 

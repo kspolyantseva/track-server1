@@ -28,3 +28,13 @@
     max-height: 200px;
     overflow-x: hidden;
 }
+/*svg*/
+.axis--x path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}

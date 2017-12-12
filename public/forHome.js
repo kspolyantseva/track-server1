@@ -25,7 +25,7 @@ if(data.name!="admin"){
         }
       //  console.log(checkData);
        drawTracks(checkData);
-
+       drawChart(checkData);
       })
 
     });
@@ -277,6 +277,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                    checkData[selected[i].username]=data[selected[i].username];
                  }
                 drawTracks(checkData);
+                drawChart(checkData);
                })
 
 
