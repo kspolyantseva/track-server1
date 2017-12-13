@@ -43,6 +43,8 @@ function clearTracksOnMap(){
   if (trackLines.length) {
     for (let line=0;line<trackLines.length;line++){
       mymap.removeLayer(trackLines[line]);
+    }
+    for (let line=0;line<markers.length;line++){
       mymap.removeLayer(markers[line]);
     }
   }
@@ -77,24 +79,48 @@ function drawTracks(data){
     for(var i=0;i<=numberOfHundreds;i++){
         var tempMas=[];
         tempHundred=tempHundred+99;
+        var lastPoint="";
         //console.log(tempHundred-99,tempHundred);
         for(var j=tempHundred-99;j<=tempHundred;j++){
           if(j<data_points.length){
             tempMas.push(data_points[j].latitude+', '+data_points[j].longitude);
+            if(i==numberOfHundreds && j==data_points.length-1){
+              lastPoint+=data_points[j].latitude+', '+data_points[j].longitude;//последняя точка для маркера
+            }
           }
         }
-        //console.log(tempMas);
+
+
         $.get('https://roads.googleapis.com/v1/snapToRoads', {
             interpolate: true,
             key: apiKey,
             path: tempMas.join('|')
           }, function(datanew) {
+
               var pointsToRoad=datanew.snappedPoints.map(p => [p.location.latitude, p.location.longitude]);
               //console.log(pointsToRoad);
               pushPointsToRoad(data_points,pointsToRoad);
-              drawWeatherAndMarker(pointsToRoad,data_points,data,key);
+
+
+
+                //drawWeatherAndMarker(pointsToRoad,data_points,data,key);
 
           });
+
+          //привязка последней точки для маркера
+          if(lastPoint.length){
+            $.get('https://roads.googleapis.com/v1/snapToRoads', {
+                interpolate: true,
+                key: apiKey,
+                path: lastPoint
+              }, function(datanew) {
+                  var pointsToRoad=datanew.snappedPoints.map(p => [p.location.latitude, p.location.longitude]);
+                  //console.log(pointsToRoad);
+                  drawWeatherAndMarker(pointsToRoad,data_points,data,key);
+              });
+          }
+
+
       }
     }
   });

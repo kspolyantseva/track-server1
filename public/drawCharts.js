@@ -40,7 +40,7 @@ function drawChart(checkData){
     data.push({UserName:Object.keys(checkData)[key],Data:dataArray})
   });
   //console.log(data,maxX);
-  drawAnyChart(".mysvg",data,"svgForSpeed",maxX,"Speed km/h","Зависимость скорости от времени");
+  drawAnyChart(".mysvg",data,"svgForSpeed",maxX,200,"Speed km/h","Зависимость скорости от времени");
 
   //формирования массива data для графика 2
   data.length=0;
@@ -55,13 +55,13 @@ function drawChart(checkData){
     }
     data.push({UserName:Object.keys(checkData)[key],Data:dataArray})
   });
-  drawAnyChart(".mysvg1",data,"svgForTemp",maxX,"Temperatute °C","Изменение температуры от времени");
+  drawAnyChart(".mysvg1",data,"svgForTemp",maxX,30,"Temperature °C","Изменение температуры от времени");
 
 }
 
 
 
-function drawAnyChart(classname,data,svgId,maxX,labelY,mainLabel){
+function drawAnyChart(classname,data,svgId,maxX,maxY,labelY,mainLabel){
   // Calculate Margins and canvas dimensions
   var margin = {top: 40, right: 40, bottom: 40, left: 60},
       width = 700 - margin.left - margin.right,
@@ -75,8 +75,15 @@ function drawAnyChart(classname,data,svgId,maxX,labelY,mainLabel){
         .range([height, 0]);
 
     var color = d3.scaleOrdinal(d3.schemeCategory10);
+    var countX;
+    if(maxX<100){
+      countX=maxX;
+    }else{
+      countX=maxX/60;
+    }
+    var xAxis = d3.axisBottom(x).ticks(countX, ",f");//maxX-количество делений по оси х
 
-    var xAxis = d3.axisBottom(x).ticks(maxX/10, ",f");//maxX-количество делений по оси х
+
 
     var yAxis = d3.axisLeft(y)
 
@@ -93,7 +100,7 @@ function drawAnyChart(classname,data,svgId,maxX,labelY,mainLabel){
 
     var svg = d3.select(classname+" > svg")
     .style("background-color", '#fff')
-    .attr("width", width + margin.left + margin.right+50)
+    .attr("width", width + margin.left + margin.right+100)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")").attr("id",svgId);
@@ -103,7 +110,7 @@ function drawAnyChart(classname,data,svgId,maxX,labelY,mainLabel){
     var usernames = data;
 
     x.domain([0, maxX]);
-    y.domain([-10, 50]);
+    y.domain([-20, maxY]);
 
     svg.append("g")
         .attr("class", "x axis")
