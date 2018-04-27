@@ -294,6 +294,18 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
       $.get("/track",function(data){
         console.log(data);
 
+        //Отрисовка графиков динамического габарита
+        $(".drawChartBetweenTwo").on('click',function(){
+           alert('В разработке!'); 
+           console.log("push drawChartBetweenTwo");
+           var checkData={};
+           var selected=$("#tracks-table").bootstrapTable('getSelections');
+           for(let i=0;i<selected.length;i++){
+             checkData[selected[i].username]=data[selected[i].username];
+           }
+          drawChartBetweenTwoTracks(checkData);
+         })
+
         //отображение выделенных последних треков
                $(".draw1").on('click',function(){
                  console.log("push draw1");
