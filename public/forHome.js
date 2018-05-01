@@ -183,11 +183,14 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
   var target = $(e.target).attr("href"); // activated tab
 //  if (target === '#menu1' && !mymap) {
   if (target === '#menu1') {
-    mymap = L.map('map').setView([ 55.803045, 37.523525], 10);
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-        maxZoom: 18,
-    }).addTo(mymap);
+    if(!mymap){
+      mymap = L.map('map').setView([ 55.803045, 37.523525], 10);
+      L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+          maxZoom: 18,
+      }).addTo(mymap);
+    }
+
 
 
     //обновление треков на карте
@@ -239,6 +242,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 });
               }
             });
+            $("#archuserstracks-table").show();
 
 
           $("#archtracks-table").bootstrapTable({

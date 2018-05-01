@@ -17,26 +17,64 @@
 //   }
 // ]
 
-function drawChartBetweenTwoTracks(checkData){
+function drawChartBetweenTwoTracks(checkData){// task 2.05
+  d3.select("#svgForRasstBetweenTwo").remove();
+  d3.select("#svgForRasstBetweenTwoFromV1").remove();
   console.log(checkData);
 
+  var data=[];
   var rasstBetweenTwo = [];
+  var rasstBetweenTwoFromV1 = [];
   var R=6356863;
   // пока что не обращаем внимание на время
   var tracks = Object.keys(checkData).map(key => checkData[key]);//.forEach(function(obj1) {
-   console.log(tracks[0][0]);
-  var mintrack = 10000;
-  for(var i=0;i<tracks.length;i++){
-    if(mintrack > tracks[i].length){
-      mintrack = tracks[i].length;
+   console.log(tracks);
+  if(tracks.length<2 || tracks.length>2){
+    alert('Выберите 2 трека, первым ведущий, затем ведомый!');
+  } else {
+    var mintrack = 10000;
+    for(var i=0;i<tracks.length;i++){
+      if(mintrack > tracks[i].length){
+        mintrack = tracks[i].length;
+      }
     }
-  }
 
-  for(var i=0;i<mintrack;i++){
-    rasstBetweenTwo.push(R*Math.acos(Math.sin(tracks[0][i].latitude)*Math.sin(tracks[1][i].latitude)+Math.cos(tracks[0][i].latitude)*Math.cos(tracks[1][i].latitude)*Math.cos(tracks[0][i].longitude-tracks[1][i].longitude)));
-  }  
-  console.log(rasstBetweenTwo);
-  
+    for(var i=0;i<mintrack;i++){
+      var S = R*Math.acos(Math.sin(tracks[0][i].latitude)*Math.sin(tracks[1][i].latitude)+Math.cos(tracks[0][i].latitude)*Math.cos(tracks[1][i].latitude)*Math.cos(tracks[0][i].longitude-tracks[1][i].longitude));
+      rasstBetweenTwo.push({ PointNumber:i, Rasst: S });
+      var sp=0;
+      if(tracks[0][i].speed<0){
+        sp=0;
+      } else {
+        sp=tracks[0][i].speed;
+      }
+      rasstBetweenTwoFromV1.push({ Speed: sp, Rasst: S });
+    }  
+    console.log(rasstBetweenTwo, rasstBetweenTwoFromV1);
+
+    var maxX=0;
+    if(rasstBetweenTwo.length>maxX){
+      maxX=rasstBetweenTwo.length;
+    }
+    var names = Object.keys(checkData)[0]+' и '+Object.keys(checkData)[1];
+    data.push({ UserName: names,Data:rasstBetweenTwo });
+    drawAnyChart(".mysvg3",data,"svgForRasstBetweenTwo",maxX,2000,"Расстояние, км","Зависимость расстояния от времени");
+
+    data.length=0;
+    var speeds = Object.keys(rasstBetweenTwoFromV1).map(key => rasstBetweenTwoFromV1[key]);
+
+    var maxspeed = 0;
+    console.log(speeds);
+    for(var i=0;i<speeds.length;i++){
+      if(maxspeed < speeds[i].Speed){
+        maxspeed = speeds[i].Speed;
+      }
+    }
+
+console.log(maxspeed);
+    data.push({ UserName: names,Data:rasstBetweenTwoFromV1 });
+    drawAnyChart(".mysvg4",data,"svgForRasstBetweenTwoFromV1",maxspeed,2000,"Расстояние, км","Зависимость расстояния от скорости ведомого","Скорость, км/ч");
+  } 
 }
 
 
@@ -44,6 +82,7 @@ function drawChart(checkData){
  d3.select("#svgForSpeed").remove();
  d3.select("#svgForTemp").remove();
  d3.select("#svgForTask1").remove();
+ d3.select("#svgForTask3").remove();
 
   var data=[];
   var maxX=0;
@@ -95,12 +134,24 @@ function drawChart(checkData){
   });
   draw2ChartsOnOne(".mysvg2",data,"svgForTask1",maxX,200,"Угол поворота, ° и скорость, км/ч","Изменение угла поворота и скорости от времени");                  
 
+  // траектория пути каждой из машин
+  data.length=0;
+  var objtask3=task3(checkData);
+  objtask3.forEach(function(obj) {
+    //console.log(obj);
+    if(obj.Data.length>maxX){
+      maxX=obj.Data.length;
+    }
+
+    data.push({UserName:obj.UserName,Data:obj.Data})
+  });
+  drawAnyChart(".mysvg5",data,"svgForTask3",maxX,500,"Пройденный путь","Траектория пути");
 
 }
 
 
 
-function drawAnyChart(classname,data,svgId,maxX,maxY,labelY,mainLabel){
+function drawAnyChart(classname,data,svgId,maxX,maxY,labelY,mainLabel,TextX='Время, с'){
   // Calculate Margins and canvas dimensions
   var margin = {top: 40, right: 40, bottom: 40, left: 60},
       width = 700 - margin.left - margin.right,
@@ -171,7 +222,7 @@ function drawAnyChart(classname,data,svgId,maxX,maxY,labelY,mainLabel){
           .style("font-size", "14px")
           .attr("text-anchor", "middle")
           .attr("transform", "translate("+ (width/2) +","+(height-(margin.bottom -74))+")")
-          .text("Points");
+          .text(TextX);
 
         //  Chart Title
         svg.append("text")
@@ -219,7 +270,7 @@ function drawAnyChart(classname,data,svgId,maxX,maxY,labelY,mainLabel){
 }
 
 
-function draw2ChartsOnOne(classname,data,svgId,maxX,maxY,labelY,mainLabel){
+function draw2ChartsOnOne(classname,data,svgId,maxX,maxY,labelY,mainLabel,TextX='Время, с'){
   // Calculate Margins and canvas dimensions
   var margin = {top: 40, right: 40, bottom: 40, left: 60},
       width = 700 - margin.left - margin.right,
@@ -290,7 +341,7 @@ function draw2ChartsOnOne(classname,data,svgId,maxX,maxY,labelY,mainLabel){
           .style("font-size", "14px")
           .attr("text-anchor", "middle")
           .attr("transform", "translate("+ (width/2) +","+(height-(margin.bottom -74))+")")
-          .text("Points");
+          .text(TextX);
 
         //  Chart Title
         svg.append("text")

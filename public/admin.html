@@ -26,6 +26,7 @@
         <li class="active"><a data-toggle="tab" href="#home">Панель Администратора</a></li>
         <li ><a data-toggle="tab" href="#menu1">Построение трека</a></li>
         <li><a data-toggle="tab" href="#menu2">Графики</a></li>
+        <li><a data-toggle="tab" href="#menu3">Зависисмости двух автомобилей</a></li>
       </ul>
 
       <div class="tab-content">
@@ -74,7 +75,9 @@
           		</div>
 
               <div id="archuserstracks-table"></div>
-              <button class="draw3">Отобразить на карте</button>
+              <button class="draw3">Отобразить на карте</button><br>
+              Для того чтобы нарисовать графики динамического габарита, выберите 2 трека, затем нажмите на кнопку
+              <button class="drawChartBetweenTwo2">Нарисовать графики</button>
               <!-- <button class="drawChart1">Нарисовать графики выбранных треков</button> -->
             </div>
 
@@ -101,7 +104,23 @@
           <div class="mysvg2">
             <svg width="960" height="500"></svg>
           </div>
+          <div class="mysvg5">
+            <svg width="960" height="500"></svg>
+          </div>
         </div>
+
+        <div id="menu3" class="tab-pane fade">
+          <div class="mysvg3">
+            <svg width="960" height="500"></svg>
+          </div>
+          <div class="mysvg4">
+            <svg width="960" height="500"></svg>
+          </div>
+        </div>
+
+
+
+
       </div>
     </div>
     <script src="tasks.js"></script>

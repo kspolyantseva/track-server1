@@ -17,6 +17,9 @@
 
 .open > .dropdown-menu {
     z-index: 10000;
+    left: 20px;
+    top: 52px;
+    padding: 6px;
 }
 
 .draw1,.draw2,.draw3,#dropdownMenu1,#start,#stop,#clearMap{
@@ -37,4 +40,10 @@
   fill: none;
   stroke: steelblue;
   stroke-width: 1.5px;
+}
+
+#archuserstracks-table{
+  display: none;
+  height:200px;
+  overflow: auto;
 }
