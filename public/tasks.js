@@ -45,12 +45,26 @@ function task3(data){
 	var rasst=[{ PointNumber:0, Rasst: 0 }];
 	var R=6356863;
 	Object.keys(data).map(key => data[key]).forEach(function(data_points,key) {
-		var zeroPoint={latitude: data_points[0].latitude, longitude: data_points[0].longitude};
-		for(var i=1;i<data_points.length;i++){
-			var S = R*Math.acos(Math.sin(zeroPoint.latitude)*Math.sin(data_points[i].latitude)+Math.cos(zeroPoint.latitude)*Math.cos(data_points[i].latitude)*Math.cos(zeroPoint.longitude-data_points[i].longitude));
+		var S=0;
+		for(var i=0;i<data_points.length-1;i++){
+			S += R*Math.acos(Math.sin(data_points[i].latitude)*Math.sin(data_points[i+1].latitude)+Math.cos(data_points[i].latitude)*Math.cos(data_points[i+1].latitude)*Math.cos(data_points[i].longitude-data_points[i+1].longitude));
       		rasst.push({ PointNumber:i, Rasst: S/1000 });//S в км, поэтому /1000
 		}
 		objectsFromTask.push({UserName: Object.keys(data)[key],Data: rasst});
 	});
 return objectsFromTask;	
 }
+
+
+
+	// var objectsFromTask =[];
+	// var rasst=[{ PointNumber:0, Rasst: 0 }];
+	// var R=6356863;
+	// Object.keys(data).map(key => data[key]).forEach(function(data_points,key) {
+	// 	var zeroPoint={latitude: data_points[0].latitude, longitude: data_points[0].longitude};
+	// 	for(var i=1;i<data_points.length;i++){
+	// 		var S = R*Math.acos(Math.sin(zeroPoint.latitude)*Math.sin(data_points[i].latitude)+Math.cos(zeroPoint.latitude)*Math.cos(data_points[i].latitude)*Math.cos(zeroPoint.longitude-data_points[i].longitude));
+ //      		rasst.push({ PointNumber:i, Rasst: S/1000 });//S в км, поэтому /1000
+	// 	}
+	// 	objectsFromTask.push({UserName: Object.keys(data)[key],Data: rasst});
+	// });

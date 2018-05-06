@@ -73,20 +73,27 @@ function drawTracks(data){
   if(data_points.length){
     var name=Object.keys(data)[key];
 
-    var numberOfHundreds=Math.round(data_points.length/100);
+    var numberOfHundreds=Math.floor(data_points.length/100);
     //console.log(numberOfHundreds);
     var tempHundred=0;
-    for(var i=0;i<=numberOfHundreds;i++){
+    //console.log(data_points);
+    var lastHundred=[];
+
+    //for(var i=0;i<=numberOfHundreds;i++){
+    var lastPoint;
+    var sendNextHundred = function() {
         var tempMas=[];
-        tempHundred=tempHundred+99;
-        var lastPoint="";
+        if (lastPoint) {
+          tempMas.push(lastPoint);
+        }
+ 
+        tempHundred=tempHundred+98;
         //console.log(tempHundred-99,tempHundred);
-        for(var j=tempHundred-99;j<=tempHundred;j++){
+        for(var j=tempHundred-98;j<=tempHundred;j++){
           if(j<data_points.length){
             tempMas.push(data_points[j].latitude+', '+data_points[j].longitude);
-            if(i==numberOfHundreds && j==data_points.length-1){
-              lastPoint+=data_points[j].latitude+', '+data_points[j].longitude;//последняя точка для маркера
-            }
+            //console.log(i,numberOfHundreds,j,data_points.length-1);
+
           }
         }
 
@@ -98,36 +105,47 @@ function drawTracks(data){
           }, function(datanew) {
 
               var pointsToRoad=datanew.snappedPoints.map(p => [p.location.latitude, p.location.longitude]);
+              if (lastPoint){
+                pointsToRoad.unshift(lastPoint.split(', '));
+              }
               //console.log(pointsToRoad);
               pushPointsToRoad(data_points,pointsToRoad);
 
-
-
-                //drawWeatherAndMarker(pointsToRoad,data_points,data,key);
+              lastPoint=pointsToRoad[pointsToRoad.length-1][0]+', '+pointsToRoad[pointsToRoad.length-1][1];
+              if (data_points.length > tempHundred) {
+                sendNextHundred();
+              } else {
+                //console.log('last is ', pointsToRoad[pointsToRoad.length-1]);
+                drawWeatherAndMarker(pointsToRoad,data_points,data,key);
+              }
+               
 
           });
 
-          //привязка последней точки для маркера
-          if(lastPoint.length){
-            $.get('https://roads.googleapis.com/v1/snapToRoads', {
-                interpolate: true,
-                key: apiKey,
-                path: lastPoint
-              }, function(datanew) {
-                  var pointsToRoad=datanew.snappedPoints.map(p => [p.location.latitude, p.location.longitude]);
-                  //console.log(pointsToRoad);
-                  drawWeatherAndMarker(pointsToRoad,data_points,data,key);
-              });
-          }
 
+    };
+    sendNextHundred();
+      //}
 
-      }
+        //для маркера берем только последнюю сотню
+        // $.get('https://roads.googleapis.com/v1/snapToRoads', {
+        //     interpolate: true,
+        //     key: apiKey,
+        //     path: lastHundred.join('|')
+        //   }, function(datanew) {
+
+        //       var pointsToRoad=datanew.snappedPoints.map(p => [p.location.latitude, p.location.longitude,p.originalIndex]);
+        //       drawWeatherAndMarker(pointsToRoad,data_points,data,key);
+            
+        //   });
+
     }
   });
 }
 
 function drawWeatherAndMarker(pointsToRoad,data_points,data,key){
     //маркеры с popup
+      //console.log('marker',pointsToRoad,pointsToRoad[pointsToRoad.length-1]);
       markers.push(L.marker(pointsToRoad[pointsToRoad.length-1],{title:Object.keys(data)[key]}).addTo(mymap).bindPopup('<p>'+Object.keys(data)[key]+'</p>',{autoPan:false}).openPopup());
 
         $("#weather").empty();
@@ -139,12 +157,15 @@ function drawWeatherAndMarker(pointsToRoad,data_points,data,key){
 }
 
 function pushPointsToRoad(data_points,pointsToRoad){
+  //console.log(pointsToRoad);
   var prevspeed=0;
   trackLines.push(L.multiOptionsPolyline(pointsToRoad, {
       multiOptions: {
           optionIdxFn: function (latLng, prevLatLng, index) {
+            //console.log(latLng,index);
             //console.log(index);
             //return index;
+
             var i, speed,
                 speedThresholds = [30, 35, 40, 45, 50, 55, 60, 65];
 
@@ -178,7 +199,7 @@ function pushPointsToRoad(data_points,pointsToRoad){
 }
 
 
-var interval;
+var interval=-1;
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
   var target = $(e.target).attr("href"); // activated tab
 //  if (target === '#menu1' && !mymap) {
@@ -195,16 +216,20 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
     //обновление треков на карте
     $("#start").on('click',function(){
-      interval=setInterval(function(){
-        $.get("/track",function(data){
-             //отрисовка треков при открытии карты
-            clearTracksOnMap();//очистка карты от треков
-            drawTracks(data);
-        });
-      },5000);
+      if(interval == -1){
+        interval=setInterval(function(){
+          $.get("/track",function(data){
+               //отрисовка треков при открытии карты
+              clearTracksOnMap();//очистка карты от треков
+              drawTracks(data);
+          });
+        },5000);
+      }
+      
     });
 
     $("#stop").on('click',function(){
+      console.log(interval);
       clearInterval(interval);//остановка реал-тайм режима отрисовки
     });
 

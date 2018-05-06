@@ -145,7 +145,7 @@ function drawChart(checkData){
 
     data.push({UserName:obj.UserName,Data:obj.Data})
   });
-  drawAnyChart(".mysvg5",data,"svgForTask3",maxX,500,"Пройденный путь","Траектория пути");
+  drawAnyChart(".mysvg5",data,"svgForTask3",maxX,2000,"Пройденный путь","Зависисмость пройденного пути от времени");
 
 }
 
@@ -154,7 +154,7 @@ function drawChart(checkData){
 function drawAnyChart(classname,data,svgId,maxX,maxY,labelY,mainLabel,TextX='Время, с'){
   // Calculate Margins and canvas dimensions
   var margin = {top: 40, right: 40, bottom: 40, left: 60},
-      width = 700 - margin.left - margin.right,
+      width = 1000 - margin.left - margin.right,
       height = 400 - margin.top - margin.bottom;
 
 
@@ -273,7 +273,7 @@ function drawAnyChart(classname,data,svgId,maxX,maxY,labelY,mainLabel,TextX='В�
 function draw2ChartsOnOne(classname,data,svgId,maxX,maxY,labelY,mainLabel,TextX='Время, с'){
   // Calculate Margins and canvas dimensions
   var margin = {top: 40, right: 40, bottom: 40, left: 60},
-      width = 700 - margin.left - margin.right,
+      width = 1000 - margin.left - margin.right,
       height = 400 - margin.top - margin.bottom;
 
 
