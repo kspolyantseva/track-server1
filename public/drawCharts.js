@@ -145,7 +145,8 @@ function drawChart(checkData){
 
     data.push({UserName:obj.UserName,Data:obj.Data})
   });
-  drawAnyChart(".mysvg5",data,"svgForTask3",maxX,2000,"Пройденный путь","Зависисмость пройденного пути от времени");
+  console.log(data);
+  drawAnyChart(".mysvg5",data,"svgForTask3",maxX,3000,"Пройденный путь","Зависисмость пройденного пути от времени");
 
 }
 

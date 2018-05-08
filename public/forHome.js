@@ -88,7 +88,7 @@ function drawTracks(data){
         }
  
         tempHundred=tempHundred+98;
-        //console.log(tempHundred-99,tempHundred);
+        //console.log(tempHundred-98,tempHundred);
         for(var j=tempHundred-98;j<=tempHundred;j++){
           if(j<data_points.length){
             tempMas.push(data_points[j].latitude+', '+data_points[j].longitude);

@@ -42,9 +42,10 @@ return objectsFromTask;
 
 function task3(data){
 	var objectsFromTask =[];
-	var rasst=[{ PointNumber:0, Rasst: 0 }];
+	
 	var R=6356863;
 	Object.keys(data).map(key => data[key]).forEach(function(data_points,key) {
+		var rasst=[{ PointNumber:0, Rasst: 0 }];
 		var S=0;
 		for(var i=0;i<data_points.length-1;i++){
 			S += R*Math.acos(Math.sin(data_points[i].latitude)*Math.sin(data_points[i+1].latitude)+Math.cos(data_points[i].latitude)*Math.cos(data_points[i+1].latitude)*Math.cos(data_points[i].longitude-data_points[i+1].longitude));
