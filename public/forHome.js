@@ -417,6 +417,119 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
 
   }
+  //!!!!!!!!!!!!!!!!!!!
+  if(target === '#archive-tracks'){
+    var archiveTracks=[];
+
+    var usernames;
+    $.get( "/alltracks", function( data ) {
+      console.log(data);
+
+      Object.keys(data).map(key => data[key]).forEach(function(tracks,key) {
+        console.log('tracks', tracks);
+          tracks.forEach(function(track) {
+            track=track.points;
+            if(track.length){
+              var objFromDate=getTimeMetrics(track);
+              archiveTracks.push({
+                trackid:track[0].track,
+                name:Object.keys(data)[key],
+                date:track[0].date,
+                weather:track[0].weather.weather[0].description,
+                weekday:objFromDate.weekday,
+                duration:objFromDate.durationData,
+                amountPoints:track.length
+              });
+            }
+          });
+      });
+      console.log('all', archiveTracks);
+
+        $("#all-tracks-table").bootstrapTable({
+            classes:"table table-hover",
+            striped:false,
+            search:true,
+            showToggle:true,
+            showColumns:true,
+            //pagination:true,
+            columns: [{
+              checkbox:true,
+            }, {
+              sortable:true,
+              searchable:true,
+                field: 'trackid',
+                title: 'TrackId'
+            },{
+              sortable:true,
+              searchable:true,
+                field: 'name',
+                title: 'Имя пользователя'
+            },{
+              sortable:true,
+              searchable:true,
+              field: 'date',
+              title: 'Дата и время'
+            },{
+              sortable:true,
+              searchable:true,
+              field: 'weather',
+              title: 'Погода'
+            },{
+              sortable:true,
+              searchable:true,
+              field: 'weekday',
+              title: 'День недели'
+            },{
+              sortable:true,
+              searchable:true,
+              field: 'duration',
+              title: 'Время в пути'
+            },{
+              sortable:true,
+              searchable:true,
+              field: 'amountPoints',
+              title: 'Количество точек'
+            }],
+            data: archiveTracks
+          });
+          $("#all-tracks-table").bootstrapTable('load', archiveTracks);
+
+
+
+        //Отрисовка графиков динамического габарита
+        $(".drawChartBetweenTwo3").on('click',function(){
+           alert('В разработке!'); 
+           console.log("push drawChartBetweenTwo");
+           var checkData={};
+           var selected=$("#all-tracks-table").bootstrapTable('getSelections');
+           for(let i=0;i<selected.length;i++){
+             var curTr = data[selected[i].name].filter(item => selected[i].trackid[0] === item.tr);
+             checkData[selected[i].name+i]=curTr[0].points;
+           }
+          drawChartBetweenTwoTracks(checkData);
+         })
+
+
+        
+
+         $(".drawAll").on('click',function(){
+                 console.log("push drawAll");
+                 var checkData={};
+                 var selected=$("#all-tracks-table").bootstrapTable('getSelections');
+                 for(let i=0;i<selected.length;i++){
+                  console.log(selected[i],selected[i].trackid,data[selected[i].name]);//
+                   var curTr = data[selected[i].name].filter(item => selected[i].trackid[0] === item.tr)[0].points;
+                   checkData[selected[i].name+i]=curTr;
+                 }
+                 console.log(checkData);
+                drawTracks(checkData);
+                drawChart(checkData);
+         })
+
+    });
+
+  
+  }
 
 });
 

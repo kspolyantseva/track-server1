@@ -97,22 +97,22 @@ $(".drop1").on('click', 'li a', function(){
         $("#archuserstracks-table").bootstrapTable('load', archiveUserTracks);
 
         //Отрисовка графиков динамического габарита
-        $(".drawChartBetweenTwo2").on('click',function(){
-          alert('В разработке!'); 
-          console.log("push drawChartBetweenTwo");
-          var checkData={};
-          var selected=$("#archuserstracks-table").bootstrapTable('getSelections');
-          for(let i=0;i<selected.length;i++){
-            tracks.forEach(function(points) {
-              if(points.length){
-                if(selected[i].trackid[0]==points[0].track[0]){
-                  checkData[chosenUser+i]=points;//пока что с таким именем!
-                }
-              }
-            });
-          }
-          drawChartBetweenTwoTracks(checkData);
-         })
+        // $(".drawChartBetweenTwo2").on('click',function(){
+        //   alert('В разработке!'); 
+        //   console.log("push drawChartBetweenTwo");
+        //   var checkData={};
+        //   var selected=$("#archuserstracks-table").bootstrapTable('getSelections');
+        //   for(let i=0;i<selected.length;i++){
+        //     tracks.forEach(function(points) {
+        //       if(points.length){
+        //         if(selected[i].trackid[0]==points[0].track[0]){
+        //           checkData[chosenUser+i]=points;//пока что с таким именем!
+        //         }
+        //       }
+        //     });
+        //   }
+        //   drawChartBetweenTwoTracks(checkData);
+        //  })
         
 
         $(".draw3").on('click',function(){

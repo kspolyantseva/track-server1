@@ -18,6 +18,7 @@
     <script src="vendor/bower_components/bootstrap-table/dist/bootstrap-table.js"></script>
     <script src="vendor/bower_components/bootstrap-table/dist/extensions/filter/bootstrap-table-filter.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/regression/1.4.0/regression.min.js"></script>
 	</head>
   <body>
     <div id="wrap">
@@ -51,6 +52,7 @@
             <li><a data-toggle="tab" href="#last-tracks">Последние треки</a></li>
             <!-- <li><a data-toggle="tab" href="#archive-user-tracks">Архив треков пользователя</a></li> -->
             <li><a data-toggle="tab" href="#archive-users-tracks">Архив треков пользователей</a></li>
+            <li><a data-toggle="tab" href="#archive-tracks">Все треки</a></li>
           </ul>
 
           <div class="tab-content">
@@ -76,9 +78,16 @@
 
               <div id="archuserstracks-table"></div>
               <button class="draw3">Отобразить на карте</button><br>
-              Для того чтобы нарисовать графики динамического габарита, выберите 2 трека, затем нажмите на кнопку
-              <button class="drawChartBetweenTwo2">Нарисовать графики</button>
+<!--               Для того чтобы нарисовать графики динамического габарита, выберите 2 трека, затем нажмите на кнопку
+              <button class="drawChartBetweenTwo2">Нарисовать графики</button> -->
               <!-- <button class="drawChart1">Нарисовать графики выбранных треков</button> -->
+            </div>
+
+            <div id="archive-tracks" class="tab-pane fade">
+              <div id="all-tracks-table"></div><br>
+              <button class="drawAll">Отобразить на карте</button><br>
+              Для того чтобы нарисовать графики динамического габарита, выберите 2 трека, затем нажмите на кнопку
+              <button class="drawChartBetweenTwo3">Нарисовать графики</button>
             </div>
 
           </div>

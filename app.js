@@ -101,6 +101,36 @@ app.get('/track', function(req, res) {
     getTrack().then(data => res.send(data));
 });
 
+async function getAllTracks() {
+    const data = {};
+    const users = await user.find({}).sort({'_id': -1}).exec();
+    for (let us of users) {
+      var userTracks=[];
+      //console.log(us);
+        var tracks=await track.find({'user': us._id}).sort({ '_id': -1 }).exec();
+        //console.log(tracks);
+        if(tracks.length){
+
+              for (let tr of tracks) {
+                  var points=await point.find({'track': tr._id}).sort({ '_id': 1 }).exec();
+                  if(points.length){
+                    userTracks.push({tr: tr._id, points: points});
+                    //userTracks[tr._id]=points;
+                  }
+              }
+            if(userTracks.length){ 
+              data[us.name] = userTracks;
+            }
+        }
+    }
+    //console.log(data);
+    return data;
+}
+
+app.get('/alltracks', function(req, res) {
+    getAllTracks().then(data => res.send(data));
+});
+
 async function getTracksUser(req,res) {
     const data = [];
 

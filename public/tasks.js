@@ -48,8 +48,11 @@ function task3(data){
 		var rasst=[{ PointNumber:0, Rasst: 0 }];
 		var S=0;
 		for(var i=0;i<data_points.length-1;i++){
-			S += R*Math.acos(Math.sin(data_points[i].latitude)*Math.sin(data_points[i+1].latitude)+Math.cos(data_points[i].latitude)*Math.cos(data_points[i+1].latitude)*Math.cos(data_points[i].longitude-data_points[i+1].longitude));
-      		rasst.push({ PointNumber:i, Rasst: S/1000 });//S в км, поэтому /1000
+			if(data_points[i].longitude-data_points[i+1].longitude !== 0){
+				S += R*Math.acos(Math.sin(data_points[i].latitude)*Math.sin(data_points[i+1].latitude)+Math.cos(data_points[i].latitude)*Math.cos(data_points[i+1].latitude)*Math.cos(data_points[i].longitude-data_points[i+1].longitude));
+      			rasst.push({ PointNumber:i, Rasst: S/1000 });//S в км, поэтому /1000
+			}
+
 		}
 		objectsFromTask.push({UserName: Object.keys(data)[key],Data: rasst});
 	});
