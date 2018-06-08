@@ -325,7 +325,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
         //Отрисовка графиков динамического габарита
         $(".drawChartBetweenTwo").on('click',function(){
-           alert('В разработке!'); 
+          //alert('В разработке!'); 
            console.log("push drawChartBetweenTwo");
            var checkData={};
            var selected=$("#tracks-table").bootstrapTable('getSelections');
@@ -498,7 +498,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
         //Отрисовка графиков динамического габарита
         $(".drawChartBetweenTwo3").on('click',function(){
-           alert('В разработке!'); 
+           // alert('В разработке!'); 
            console.log("push drawChartBetweenTwo");
            var checkData={};
            var selected=$("#all-tracks-table").bootstrapTable('getSelections');
