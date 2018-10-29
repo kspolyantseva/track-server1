@@ -1,4 +1,4 @@
-var express = require('express');
+﻿var express = require('express');
 var path = require('path');
 var mongoose = require('./db');
 var session=require("express-session");
@@ -217,6 +217,6 @@ app.post('/addNewPointOfAllegedViolations',function(req,res){
 });
 
 
-app.listen(3000, function(){
+app.listen(3000, "0.0.0.0", function(){
   console.log('Example app listening on port 3000!');
 });
