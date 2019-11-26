@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://lanaDB:Diploma18@ds249355.mlab.com:49355/app_bd',{ useMongoClient: true, autoReconnect:true });//('mongodb://localhost/test');
+mongoose.connect('mongodb://kspolyantseva:testapp26@ds052968.mlab.com:52968/app_bd',{ useMongoClient: true, autoReconnect:true });//('mongodb://localhost/test');
 // var connection = mongoose.createConnection('ds249355.mlab.com:49355/app_bd',
 // {
 // User: 'lanaDB',
@@ -16,7 +16,7 @@ console.log('MongoDB reconnected!');
 });
 db.on('disconnected', function() {
 console.log('MongoDB disconnected!');
-mongoose.connect('mongodb://lanaDB:Diploma18@ds249355.mlab.com:49355/app_bd', {useMongoClient: true, autoReconnect:true});
+mongoose.connect('mongodb://kspolyantseva:testapp26@ds052968.mlab.com:52968/app_bd', {useMongoClient: true, autoReconnect:true});
 });
 
 module.exports=mongoose;
