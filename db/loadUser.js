@@ -5,7 +5,7 @@ module.exports=function(req, res, next){
       name:"Tom",
       age:44,
       sex:"male",
-      direction_of_work:'engineer',
+      driving_experiencek:5,
       password:""
     });
     user.save(function (err, user) {
