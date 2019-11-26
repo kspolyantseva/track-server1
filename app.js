@@ -1,4 +1,4 @@
-﻿var express = require('express');
+var express = require('express');
 var path = require('path');
 var mongoose = require('./db');
 var session=require("express-session");
@@ -20,7 +20,7 @@ app.post('/addNewPerson',function(req,res){
     password: req.body.password,
     age:req.body.age,
     sex:req.body.sex,
-    direction_of_work:req.body.direction_of_work
+    driving_experience:req.body.driving_experience
   });
 
   us.save(function (err, us) {
@@ -118,7 +118,7 @@ async function getAllTracks() {
                     //userTracks[tr._id]=points;
                   }
               }
-            if(userTracks.length){ 
+            if(userTracks.length){
               data[us.name] = userTracks;
             }
         }
