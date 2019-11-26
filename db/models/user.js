@@ -12,7 +12,7 @@ var schema = new Schema({
   salt:String,
   age:Number,
   sex:String,
-  direction_of_work:String,
+  driving_experience:Number,
   photos_from_accidents:Array
 });
 
