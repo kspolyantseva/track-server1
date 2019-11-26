@@ -20,10 +20,10 @@ function getWeather(args) {
 async function createNewPoint(track, pointData,res){
   const weather = await getWeather(pointData);
 
-  const {latitude, longitude, date, speed} = pointData;
+  const {date, latitude, longitude,  speed, position, accX, accY, accZ, gyrX, gyrY, gyrZ, road, daytime, tyre} = pointData;
 
   var point=new Point({
-    latitude, longitude, date, speed,
+    date, latitude, longitude,  speed, position, accX, accY, accZ, gyrX, gyrY, gyrZ, road, daytime, tyre,
     track:track._id,
     weather:weather,
   });
